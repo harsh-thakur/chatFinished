@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-sm-5">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" [(ngModel)]="sender" class="form-control" id="emailaddress" placeholder="Enter Email Address">
+            <small id="userHelp" class="form-text text-muted">Type Your Email Address.</small>
+        </div>
+    </div>
+    <div class="col sm-2">
+        <div style="margin-top:19px;" class="pull-right">
+            <button type="button" class="btn btn-primary" (click)="enter()">Enter</button>
+            <!-- <button type="button" class="btn btn-default" (click)="leave()">Leave</button> -->
+        </div>
+    </div>
+</div>
+
+
+<div class="container" *ngIf="result">
+    <a routerLink="/chatInvites">
+        <button type="button" class="btn btn-primary" (click)='chatInvites()'>Chat Invites
+            <span class="badge" style="background-color:rgb(190,0,0)">{{noOfChatInvites.length}}</span>
+        </button>
+    </a>
+    <div *ngIf="show">
+        <div class="jumbotron" *ngFor="let chat of noOfChatInvites;let i=index">
+             <p>{{chat}}</p> 
+             <div class="ui two buttons">
+                    <button type="button" class="btn btn-primary" (click)="accept(_id[i])">Accept</button>
+                    <button type="button" class="btn btn-primary" style="background-color:rgb(190,0,0)" (click)="decline(_id[i],i)">Decline</button>
+            </div>
+        </div>
+    </div>
+</div>

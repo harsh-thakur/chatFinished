@@ -1,0 +1,66 @@
+<div class="container-fluid">
+  <div class="row">
+    <h2>Communication Window</h2>
+    <hr>
+  </div>
+  <div class="row">
+    <div class="col-sm-5">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" [(ngModel)]="user" class="form-control" id="username" placeholder="Enter username">
+        <small id="userHelp" class="form-text text-muted">Type your username.</small>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" [(ngModel)]="sender" class="form-control" id="emailaddress" placeholder="Enter Email Address">
+        <small id="userHelp" class="form-text text-muted">Type Your Email Address.</small>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="form-group">
+        <label for="receiver_email">Receiver's Email</label>
+        <input type="text" [(ngModel)]="receiver" class="form-control" id="receiver_email" placeholder="Enter Receiver's Email Address">
+        <small id="userHelp" class="form-text text-muted">Type Receiver's Email Address.</small>
+      </div>
+    </div>
+    <div class="col sm-2">
+      <div style="margin-top:19px;" class="pull-right">
+        <button type="button" class="btn btn-primary" (click)="join()">Join</button>
+        <!-- <button type="button" class="btn btn-default" (click)="leave()">Leave</button> -->
+      </div>
+    </div>
+  </div>
+  <div *ngIf='chatWindow'>
+    <div class="row">
+      <div class="well" style="height:200px; padding:15px;overflow:scroll;">
+        <div class="col-sm-6">
+          <div *ngFor="let item of messageArray">
+            <span>
+              <p *ngIf="item.sender==sender">
+                <strong>{{item.user}}: </strong>
+                <br>{{item.message}} </p>
+              <p *ngIf="item.sender==receiver" style="padding-left:60px">
+                <strong>{{item.user}}: </strong>
+                <br>{{item.message}} </p>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="messageText">
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-success pull-right" (click)="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf='sendInviteButton'>
+    <button type="button" class="btn btn-primary" (click)='sendInvite()'>Send Invite</button>
+    <button type="button" class="btn btn-primary" (click)='receiveInvite()'>Receive Invite</button>
+  </div>
+</div>
