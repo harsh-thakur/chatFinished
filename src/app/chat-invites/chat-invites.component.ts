@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { ChatService } from '../services/chat.service';
 
+import { ChatComponent } from '../chat/chat.component';
+
 interface MessageTemplate {
   user: String; room: any; message: String; sender: any; receiver: any;
 }
@@ -53,6 +55,7 @@ this.show = false;
    this._chatService.toggel(index).
    then((res) => {
      console.log(res);
+   //  this.router.navigate([/ChatComponent]);
      });
  }
  decline(index, i) {
@@ -66,7 +69,6 @@ this.show = false;
   //  console.log("Decline k Baad",this.noOfChatInvites);
     // this.result = false;
     // this.show = false;
-
  }
  chatInvites() {
    this.show = true;

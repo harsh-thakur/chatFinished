@@ -36,12 +36,20 @@
     <div class="row">
       <div class="well" style="height:200px; padding:15px;overflow:scroll;">
         <div class="col-sm-6">
-          <div *ngFor="let item of messageArray">
-            <span>
-              <p *ngIf="item.sender==sender">
+          <div> 
+              <span *ngFor="let item of messageArray1">
+                  <p *ngIf="item.sender == 'a'">
+                    <strong>{{item.user}}: </strong>
+                    <br>{{item.message}} </p>
+                  <p *ngIf="item.sender=='b'" style="padding-left:60px">
+                    <strong>{{item.user}}: </strong>
+                    <br>{{item.message}} </p>
+                </span> 
+            <span *ngFor="let item of messageArray">
+              <p *ngIf="item.sender == 'a'">
                 <strong>{{item.user}}: </strong>
                 <br>{{item.message}} </p>
-              <p *ngIf="item.sender==receiver" style="padding-left:60px">
+              <p *ngIf="item.sender=='b'" style="padding-left:60px">
                 <strong>{{item.user}}: </strong>
                 <br>{{item.message}} </p>
             </span>
@@ -61,6 +69,6 @@
   </div>
   <div *ngIf='sendInviteButton'>
     <button type="button" class="btn btn-primary" (click)='sendInvite()'>Send Invite</button>
-    <button type="button" class="btn btn-primary" (click)='receiveInvite()'>Receive Invite</button>
+    <!-- <button type="button" class="btn btn-primary" (click)='receiveInvite()'>Receive Invite</button> -->
   </div>
 </div>

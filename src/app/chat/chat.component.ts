@@ -8,7 +8,7 @@ import { ChatService } from '../services/chat.service';
 import { ApiService } from '../services/api.service';
 
 interface MessageTemplate {
-  user: String; room: any; message: String; sender: any; receiver: any;
+  user: String; room: any; message: String; messages: String[]; sender: any; receiver: any;
 }
 
 
@@ -26,10 +26,11 @@ export class ChatComponent implements OnInit {
   receiver: any;
   room: any;
   messageText: string;
-  chatWindow: any;
+  chatWindow: boolean;
   sendInviteButton: boolean;
   chatInvitesButton: boolean;
   messageArray: Array<MessageTemplate> = [];
+  messageArray1: any;
   ngOnInit() {
     //  this.socket = io('http://localhost:5000');
  }
@@ -44,7 +45,7 @@ export class ChatComponent implements OnInit {
       .subscribe(data => this.messageArray.push(data));
       this._chatService.oldMessage()
       .subscribe((data) => {
-        console.log(data);
+        console.log('Data', data);
          this.messageArray = data;
         });
        this._chatService.sendInvitation()
@@ -66,10 +67,21 @@ export class ChatComponent implements OnInit {
     this.room = text;
     this._chatService.joinRoom({ user: this.user, room: this.room,
       sender: this.sender, receiver: this.receiver, chatWindow: false}).
-      then((res) => {
-        console.log(res);
-        this.chatWindow = res;
+      then((res: any) => {
+        console.log('Inside .............', res.flag);
+        this.chatWindow = res.flag;
          this.sendInviteButton = !res;
+         console.log(res.messages);
+         this.messageArray1 = res.messages.sort(function(a, b): boolean {
+          return new Date(a.created) > new Date(b.created) ? true : false;
+        });
+         console.log('message array is ', this.messageArray1);
+
+        //  this.messageArray = res.messages;
+        const len = res.messages.length;
+        // for(let i=0 ; i<len; i++){
+        //   this.messageArray.push(res.messages[i])
+        // }
          console.log(this.sendInvite);
       });
   }
@@ -92,4 +104,8 @@ export class ChatComponent implements OnInit {
     this._chatService.sendMessage({ user: this.user, message: this.messageText, sender: this.sender, receiver: this.receiver });
     this.messageText = '';
   }
+   sortByDateAsc(lhs, rhs)  { return lhs > rhs ? 1 : lhs < rhs ? -1 : 0; }
+
+   sortByDateDesc(lhs, rhs) { return lhs < rhs ? 1 : lhs > rhs ? -1 : 0; }
+
 }

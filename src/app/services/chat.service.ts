@@ -6,33 +6,35 @@ import { environment } from '../../environments/environment';
 import { Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import { ApiService } from './api.service';
+
 
 interface MessageTemplate {
-    user: String; room: any; message: String; sender: any; receiver: any;
+    user: String; room: any; message: String; messages: String[]; sender: any; receiver: any;
 }
 
 @Injectable()
 
 export class ChatService {
     socket = io('http://localhost:5000');
-    constructor(public http: Http,
-        public apiService: ApiService) { }
+    constructor(public http: Http) { }
     public joinRoom(value: any) {
         console.log(' data: ', value);
         return this.http.post(`${environment.api_url}/join`, value)
             .toPromise()
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 const res1 = res.json();
-                console.log(res1);
+                console.log(res1.data[0]._from);
+                const messages = Array.of(...res1.data[0]._from.messages, ...res1.data[0]._to.messages);
+                console.log('messagesss', messages);
                 const temp = res1.data;
+                // Object.assign(messages, )
                 console.log(temp);
                 if (temp !== 0) {
                     this.socket.emit('join', value);
-                    return true;
+                    return {messages: messages, flag : true};
                 } else {
-                    return false;
+                    return {messages: 'nothing', flag : false};
                 }
 
             }).catch(err => {
@@ -46,7 +48,7 @@ export class ChatService {
             .toPromise()
             .then((res) => {
                 const res1 = res.json();
-                console.log(res1.data);
+               console.log(res1.data);
                 return res1.data;
             }).catch(err => {
                 console.log('err is: ', err);
@@ -74,7 +76,8 @@ export class ChatService {
     }
 
     userLeftRoom() {
-        const observable = new Observable<{ user: String, room: any, message: String, sender: any, receiver: any }>(observer => {
+        const observable = new Observable<{ user: String, room: any,
+             message: String, messages: String[], sender: any, receiver: any }>(observer => {
             this.socket.on('left room', (data) => {
                 observer.next(data);
             });
@@ -87,19 +90,20 @@ export class ChatService {
     }
 
     newMessageRecieved() {
-        const observable = new Observable<{ user: String, room: any, message: String, sender: any, receiver: any }>(observer => {
+        const observable = new Observable<{ user: String, room: any,
+            message: String, messages: String[], sender: any, receiver: any }>(observer => {
             this.socket.on('new message', (data) => {
+                console.log('fetched from database', data);
                 observer.next(data);
             });
             return () => { this.socket.disconnect(); };
         });
         return observable;
-
     }
     oldMessage() {
         const observable = new Observable<MessageTemplate[]>(observer => {
             this.socket.on('load old msgs', (data) => {
-                console.log(data);
+               // console.log('Old messages',data);
                 observer.next(data);
             });
             return () => { this.socket.disconnect(); };
@@ -107,7 +111,8 @@ export class ChatService {
         return observable;
     }
     sendInvitation() {
-        const observable = new Observable<{ user: String, room: any, message: String, sender: any, receiver: any }>(observer => {
+        const observable = new Observable<{ user: String, room: any, message: String,
+             messages: String[], sender: any, receiver: any }>(observer => {
             this.socket.on('send-invitation', (data) => {
                 observer.next(data);
             });

@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from './services/chat.service';
-import { ApiService } from './services/api.service';
 import { HttpModule } from '@angular/http';
 import { ChatInvitesComponent } from './chat-invites/chat-invites.component';
 
@@ -30,7 +29,7 @@ const appRoutes: Routes = [
    HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ChatService, ApiService],
+  providers: [ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
